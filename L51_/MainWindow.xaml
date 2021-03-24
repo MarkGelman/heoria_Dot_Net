@@ -1,0 +1,24 @@
+﻿<Window x:Class="L51_.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:L51_"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <StackPanel>
+            <TextBox Text="{Binding MyPerson1.Name,Mode=TwoWay}"
+                     VerticalAlignment="Top" 
+                     x:Name="txt1"
+                     Margin="50 10"/>
+            <Label Content="{Binding MyPerson1.Name, Mode=OneWay}"
+                   VerticalAlignment="Top" 
+                   x:Name="lbl1"
+                   />
+            <Button Click="Button_Click"> 
+                Modify to Yakov
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>
