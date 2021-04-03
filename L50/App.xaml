@@ -8,7 +8,6 @@
         <Style TargetType="Button" x:Key="MyAppStyle">
             <Setter Property="Foreground" Value="Blue"/>
             <Setter Property="FontWeight" Value="ExtraBold"/>
-            <Setter Property="Background" Value="Yellow"/>
         </Style>
     </Application.Resources>
 </Application>

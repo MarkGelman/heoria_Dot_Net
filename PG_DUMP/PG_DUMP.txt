@@ -6,3 +6,11 @@
 3. pg_dump.exe -d [имя БД] -U postgres -f [полный путь где мы хотим сохранить этот файл.К примеру c:\temp\sql2.sql]
 
 4. Сохранёный файл загружаем в GIT.
+
+5. Строка которая преобразует скрипт в базу данных через СMD:
+	C:\Users\Mark>cd "C:\Program Files\PostgreSQL\13\bin" -- нажать ENTER
+	C:\Program Files\PostgreSQL\13\bin>psql -- нажать ENTER
+	-U postgres -d db-name -f c:\file-path-name
+
+  !!!																		!!!
+		При загрузке в data grid нужно подождать, т.к. сразу не загружает

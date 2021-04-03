@@ -1,0 +1,1050 @@
+WPF (ДПФ)- самая сильная вещь для написания апликаций на Windows.Его самый большой недостаток, что она не CrossPlatform.
+    Эта аппликация предназначена только для Windows. 
+    Eщё одним её недостатком является её большая объёмность различных аттрибутов в элементах. Нужно знать очень
+    много материала, что использовать всю мощь WPF.
+    WPF(ДПФ) -- можно использовать в двух формах:
+        1) Как апликацию WinForm, но тогда нет возможности использовать архитектуру WPF (к примеру MVVN)
+        2) WPF(ДПФ)
+    Ещё одно преимущество WPF - это возможность использования графического вектора, который даёт возможность
+    работы при различных резолюциях (работает с пикселями, с видеокартой,Direct 9X... ). С его помощью можно
+    делать изображение трёхмерным.
+    Ещё одно отличие WPF от WinForm в том, что в нём нет ДИЗАЙНЕРА как в WinForm. В WPF дизайнер это замель.
+    
+XAML (замель) -- это XML который предназначен для апликаций.ДПФ -- можно писать в замеле и при этом связывать его
+                с вещами вне его (классами, к примеру).
+                В начале каждого замеля пишется схема по которой он работает. Мы будем использовать постоянную
+                схему, которая пишется автоматически при создании проэкта ДПФ.
+                Каждая такая схема начинается с элемента 
+                    <Window></Window> -- между этими скобками и пишется схема. Одна из самых важных вещей в ней
+                    это первая строчка
+                    <Window 
+                        x:Class = "WpfApp1.MainWindow -- "х" - здесь говорит, что будет задано какое-то имя для
+                                                            использования этого имени во время написания кода
+                                                         Class - здесь говорит, что будет задано имя nameSpace
+                                                        соответствующее имени программы.
+                        Title = "MainWindow" -- название окна ДПФ
+                        >
+                    </Window>
+                
+
+ПАНЕЛИ в WPF:
+    I.Default WPF -- блок который говорит ДПФ как нужно разместить элементы в окне посердством столбцов
+                    и строк.
+        <Grid Margin="22,0,0,35"> -- MARGIN - позволяет сделать отступ от другого элементоа окна или от границ окна.
+                <Grid.RowDefinitions> -- опредяляет сколько места занимает строка
+                    <RowDefinition/>
+                    <RowDefinition Height="0"/> -- определяет высоту строки
+                    <RowDefinition Height="*"/> -- занимает всё оставшееся место
+                    <RowDefinition Height="Auto"/> -- определяет высоту строки по самому высокому элементу в строку
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions> -- Все аттрибуты подобны аттрибутам в RowDefinition только в столбце задаётся его ширина, а не высота как в строке!!!
+                    <ColumnDefinition Width="65*"/>
+                    <ColumnDefinition Width="89*"/>
+                </Grid.ColumnDefinitions>
+        </Grid>
+       
+        II.<StackPanel Orientation = "Horizontal" (default) or "Vertical">
+                Это блок в котором каждый указаный в нём элемент растягивается на всю ширину окна ("Horizontal")
+                или ("Vertical"),если не указана его длина и ширина, и распологает их один под другим.
+        </StackPanel>
+        III.<DockPanel Margin = "8" одна цифра в кавычках указывет размер отступа всех элементов панели от всех её
+                            границ. В данном примере отступ от всех границ будет равен "8">
+                Он располагает элементы окна (прилепливает их) к бокам,к верху и к низу, а последний элемент
+                всегда занимает всё оставшееся место!
+        </DockPanel>
+
+Элементы и их атрибуты:
+
+    I. Button
+                  <Button   x:Name = "button" 
+                            Content = "Click Me" 
+                            HorizontalAlignment = "Left"  
+                            Margin = "150" 
+                            VerticalAlignment = "Top"
+                            Height = "30"
+                            Width = "75" /> 
+
+                            ИЛИ
+
+                 <Button  Height = "40" Width = "175" Margin = "10" Content = "Dependency Property"> 
+                    <Button.Style> 
+                        <Style TargetType = "{x:Type Button}"> 
+                            <Style.Triggers> 
+					
+                              <Trigger Property = "IsMouseOver" Value = "True"> 
+                                 <Setter Property = "Foreground" Value = "Red" /> 
+                              </Trigger>
+						
+                            </Style.Triggers>
+                       </Style> 
+                    </Button.Style> 
+                </Button> 
+
+    II. LISTBOX:
+                 <ListBox   x:Name = "listBox" 
+                            Height = "100" 
+                            Width = "100" 
+                            Margin = "20"
+                            ItemsSource="{x:Static Fonts.SystemFontFamilies} -- такая запись говорит, что чтобы
+                                            получить нужный результат требуется сделать определёные операции "
+                                          В данном случае надо обратиться к ф-ции SystemFontFamilies находящейся
+                                          в классе Fonts и получить её значение. Значение этой ф-ции List состоящий
+                                          из Fonts. В результате мы видим весь этот лист в листБоксе в окне ДПФ
+                          > 
+                             <ListBoxItem Content = "Item 1" /> 
+                             <ListBoxItem Content = "Item 2" /> 
+                             <ListBoxItem Content = "Item 3" /> 
+                </ListBox>
+    III. BORDER
+                <Border DockPanel.Dock="Top" -- размещение внутри панели. В данном случае внутри DockPanel/
+                    CornerRadius="6" -- радиус закругления границ 
+                    BorderThickness="1" -- толщина границы
+                    BorderBrush="Green" -- цвет границы
+                    Background="Yellow" -- цвет фона внутри блока
+                    Padding="8" -- отступление содержимого блока от каждай его границы внутрь
+                    Margin="0 0 0 8" - отступлени блока от соседних элементов окна или панели в которой он расположен
+                    >
+                </Border>
+
+    IV. TEXTBOX:
+                <TextBox 
+                    x:Name ="nameElement" -- задаёт програмное имя для элемента
+                    HorizontalAligment = "Left" -- размещение  на текстовом элементе по горизонтали
+                    VerticalAligment = "Top" - размещение на текстовом элементе по вертикали
+                    TextWrapping = "Wrap" - автоматический перенос текста при достижении его длины границ его элемента
+                    Margin = "1 2 3 4" -- определяет расстояние отступа данного элемента от его соседей или границ окна
+                    Margin = "1  2" -- если только две цифры то первая цифра -- это отступ от боковых элементов,
+                                            а вторая -- от элементов находящихся выше или ниже данного элемента.                    
+                   Text = "конкретный текст который должен быть отображён на элементе" только для текстовый элементов
+                    Сontent = "текст котрый должен быть размещён  на элементе" аттрибут для кнопок
+                    Height ="" высота элемента в квычках
+                    Width = "" ширина элемента в квычках
+                    ToolTip = "текст всплывающей подсказки" -- всплывающая подсказка когда мышка находится над элементом
+                    DockPanel.Dock = "Bottom" -- расположение элемента внутри панели. В данном случае DockPanel
+                    MinLines="4" -- указывает текстБоксу, что его ширина по умолчанию должна быть равной ширине не 
+                                    менее 4 строчек.
+                    Margin="8 0"
+                    Text="{Binding ElementName=SampleText, Path=Text}" -- бандинг означает, что нужно буде связать
+                                        данный элемент програмное имя которого присваивается полю    Element Name
+                                        (в данном случае как значение SamleText), но этого не достаточно поскольку не
+                                        понятно значение какого имено его атрибута следует получить из этого элемента.
+                                        Поэтому то что мы хотим получить мы присваиваем полю Path атрибута Text.
+                    FontFamily="{Binding ElementName=FontList,Path=SelectedItem}" -- этот атрибут определяет на 
+                                        каком фонте будет написан текст в элементе. И как мы видим он тоже Binding.
+                                        В этой строке мы просим обратится к полю имя которого FontList а информацию
+                                        взять из выделеного элемента в этом листе
+                    FontSize="10"
+                    x:Name = "nameControl" - задаёт имя элементу по которому к нему можно будет обратиться из кода программы
+                    HorizontalAlignment="Left" 
+                    Grid.Column ="1" Grid.Row = "1" -- определяет в какую строку и в какой столбец вставлять содержимое TextBlock
+                    Text = "....." -- текст который я хочу вставить по выше указаным координатам
+                    Grid.ColumnSpan = 3 -- насколько столбцов нужно растянуть выше приведёный текст
+                    ToolTip = "Click if you dare" -- Представляет элемент управления, создающий всплывающее окно, отображающее информацию об элементе интерфейса.
+                    Margin="170,342,0,0" 
+                    VerticalAlignment="Top"
+                    Width="145" FontSize="25" 
+                    RenderTransformOrigin="0.592,0.219">
+                    MouseDown = "TextBlock_MouseDown" -- это EVENT,чтобы написать код для этого аттрибута можно в Properties
+                                                         (на название этого Event-а нужно нажать F4) 
+                                                         нажать даблКлик на название этого EVENT-а или на строке этого эвента
+                                                         в аттрибутах нажать F12 программа перейдёт в код и в соответствующей
+                                                         функции написать требуемый код.
+                >
+                The quick brown fox jumps over the lazy dog. 
+            </TextBox>
+                   
+            !!!                                                                                                 !!!
+            
+                Текст записаный между открытием и закрытием элемента (как в элементе тексБокс привдёном выше
+                не  может быть изменён в окне ДПФ после запуска программы.Если же текст записан в квычках в 
+                атрибуте Text, то тогда он да может быть  изменён после запуска программы.
+          
+            !!!                                                                                                 !!!
+            
+        
+    !!!                                                                                                          !!!
+        При запуске WPF мы получаем окно с линейкой инструментов (поумолчанию). Эту линейку можно отменить. Эта
+        лиейка даёт возможность поимания какой элемент окна с каким связан (кто папа, а кто сын) . Даёт понимание
+        иерархии поэтому и называется "Live Visual Tree".Есть ещё один инструмент называется SnoopDoc. Эти инструменты
+        позволяют очень быстро понимать архитектуру программы, что позволяет быстро вносить изменения!
+    !!!                                                                                                          !!!
+
+!!!                                                                                                                         !!!
+     Если нажать  F4 заходим в Properties. Можно через это окно изменять элементы как в окне так и в XAML. Здесь же есть
+     кнопка EVENT как и в VS
+!!!                                                                                                                         !!!
+
+************************************************ЭЛЕМЕНТ COMBOBOX********************************************
+    V. COMBOBOX:
+         <ComboBox x:Name="myComboBox"
+                            Grid.Column="1"
+                            Grid.Row="6"
+                            Grid.ColumnSpan="3"
+                            Margin="10"
+                            Height="20">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate> -- 
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding FirstName}"/>
+                                <TextBlock Text="{Binding LastName}" Margin="10 0 0 0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+    <DataTemplate> -- объясняет элементу откуда и в каком ввиде взять и предоставить информацию
+    <TextBlock Text="{Binding FirstName}"/> 
+    <TextBlock Text="{Binding FirstName}"/>- WPF знает с откуда брать информацию так мы в конструктор 
+                        класса этого окна присвоили программному имени комбобокса (myComboBox) откуда
+                        ему брать данные
+                                myComboBox.ItemsSource = people;
+                        people - это лист класса Person. Этот класс мы также определили внутри класса окна
+                                WPF
+!!! 
+        Возможна и другая запись одной строчкой
+                        <TextBlock Text="{Binding}"/> -- при правильном написании кода нет нужды указывать
+                                                        точно этому элементу в замель откуда брать инфу
+!!!
+
+    VI. ЭЛЕМЕНТ IMAGE && MEDIA ELEMENT:
+
+        1. Добавление IMAGE && MEDIA ELEMENT:
+            1) Сначала нужно добавить файлы video и image в папку проекта REFERENCE  на компе;
+            2) Добавить эти файлы в Solution Explorer
+                Add -> Exsistin Item -> выбрать требуемые файлы;
+            3) Подсоединение файлов непосредствено к коду проекта:
+                1) Для Image
+                        Правая кнопка мыши на название файла в проекте -> Properties -> 
+                            -> Build Action = Content
+                               Copy to output derectory = Copy always
+                2) Для Video
+                        Правая кнопка мыши на название файла в проекте -> Properties -> 
+                            -> Build Action = Embeded Resource
+                               Copy to output derectory = Copy always
+            4) В замель:
+                1) <Image Source = "Resources\nameFile.extention"/>
+                2) <MediaElement Source = "Resources\nameFile.extention"/>
+
+    VII. ЭЛЕМЕНТ SCROLVIEWER 
+
+         <ScrolViewer
+                        Grid.Row
+                        Grid.Column
+                        Grid.RowSpan>
+                <StackPanel
+                        <Image .../>
+                        <Image .../>
+                        <Image .../>
+                        <Image .../>
+                </StackPanel>
+            </ScrolViewer>
+
+         1. Если содержимое окна или блока слишком большое, то стоит применить SCROLVIEWER (LIFT).
+         2. Элементы в ScrolViewer должны быть вписаны в StackPanel.
+
+    VIII. SLIDER 
+
+        <Slider IsSnapToTickEnabled="True" 
+                        Margin="0 50 0 0" Value="50"
+                        x:Name="sld" Minimum="0" Maximum="100" Width="300"
+                        HorizontalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Margin="250 25 0 0" 
+                        >OneWay:</TextBlock>
+                <TextBlock Margin="10 25 0 0"  Width="100"
+                         TextAlignment="Right"
+                         Text="{Binding ElementName=sld, Path=Value, Mode=OneWay}" 
+                         HorizontalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Margin="250 25 0 0" 
+                        >TwoWay:</TextBlock>
+                    <TextBox Margin="10 25 0 0"  Width="100"
+                         TextAlignment="Right"
+                         Text="{Binding ElementName=sld, Path=Value, Mode=TwoWay}" 
+                         HorizontalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Margin="250 25 0 0" 
+                        >OneWayToSource:</TextBlock>
+                    <TextBox Margin="10 25 0 0"  Width="100"
+                         TextAlignment="Right" 
+                         Text="{Binding ElementName=sld, Path=Value, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" 
+                         HorizontalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        Margin="250 25 0 0" 
+                        >OneTime:</TextBlock>
+                    <TextBlock Margin="10 25 0 0"  Width="100"
+                         TextAlignment="Right"
+                         Text="{Binding ElementName=sld, Path=Value, Mode=OneTime}" 
+                         HorizontalAlignment="Center"/>
+                </StackPanel>  
+        
+        1. Элемент Slider -- это полоса прокрутки с бегунком.
+        2. В Slider-е всегда надо указывать его минимальное и максимальное значение. Делается это в его следующих
+            атрибутах: Minimum="0" Maximum="100"
+        3. Следует также указать атрибут IsSnapToTickEnabled="True" -- чтобы не отбражались десятичные значения при
+            движении бегунка Silder-а
+        2. Элемент Slider всегда используется вместе с элементом TextBox при чём Slider для TextBox-а всегда будет
+            источником данных (Source/Target соответственно)
+        3. Общаются эти два элемента между собой при помощи такого атрибута TextBox как Mode:
+            1) Mode= OneTime -- при этом в TextBox будет одноразово записано превоначальное значение Slider-а, кот
+                        не будет меняться не зависимо от того будет ли меняться при это значение Sider-а или нет!
+
+            2) Mode= OneWay -- при это значение в TextBox будут меняться при движении бегунка, а вот бегунок не будет
+                                менять своё положение, если изменить значение в TextBox.
+            3) Mode= OneWayToSource -- при этом в TB не будет меняться значение соответствено движению каретки, но
+                                        положение каретки будет меняться при изменении значения в TB.
+            4) Mode= TwoWay -- при этом значения в TB и в Slider-е будут изменяться обоюдно.
+            5) Mode= Default -- если не указать значение Mode то его значением по умолчанию будет TwoWay.
+        4. UpdateSourceTrigger=PropertyChanged - изменения вступят в силу только после изменения (не вовремя, а сразу
+                                                    же после) значения в Slider-e или/и в TB.
+           UpdateSourceTrigger=LostFocus -- изменения вступят в силу только после перехода фокуса с изменённого
+                                                элемента на какой-либо другой элемент.
+           UpdateSourceTrigger -- по умолчанию изменения происходят одновремено с введением изменений.
+        5. Вид строки которая связывает TB и Slider:
+            
+                    Text="{Binding ElementName=sld, Path=Value, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
+
+
+    IX.  TEXTBLOCK :
+
+        <TextBlock 
+                    TextWrapping="Wrap" 
+                    Text="Hello, styled world" 
+                    FontSize="18"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <EventTrigger RoutedEvent="MouseDown">
+                                     <EventTrigger.Actions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0:0:0.300" Storyboard.TargetProperty ="FontSyze" To ="28"/>
+                                                <DoubleAnimation Duration="0:0:0.300" Storyboard.TargetProperty ="FontSyze" To ="18"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                     </EventTrigger.Actions>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="MouseLeave">
+                                    <EventTrigger.Actions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0:0:0.800" Storyboard.TargetProperty ="FontSyze" To ="36"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger.Actions>
+                                </EventTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+Cвязывание элементов между собой:
+    I. Binding
+    II.Data Binding
+        Как сделать так, чтобы элемент WPF получал данные не из замель, а из кода программы, скажем из БД.
+        Для этого:
+            1.  В коде:
+                    а) определим класс из которого мы будем получать инфу (В нашем случае класс Person). 
+                    b) Затем в классе замель создадим глобальное свойствo Person.
+        
+                            public Person MyPerson1 { get; set; }
+                            public class Person
+                            {
+                                public string Name { get; set; }
+                                public override string ToString()
+                                {
+                                    return $"Person name {Name}";
+                                }
+                            }
+                            public MainWindow()
+                            {
+                               
+                                InitializeComponent();
+                                MyPerson1 = new Person { Name = "Very special person!" };
+                                //this.DataContext = this -- Связывание на уровне окна;
+                                //this.lbl1.DataContext = MyPerson1 -- связывание на уровен;
+                                this.lbl1.DataContext = this;
+                            }
+            2. В замель:
+                а) создадим элемент на который будем выводить нужные нам данные из кода
+                b) обязательно нужно задать ему кодовое имя в атрибуте Name
+                c) в его атрибуте Context нужно задать ему Binding покоторому он будет держать связь с
+                    классом Person. Для этого нужно привезать его к полю класса Person, которые мы задали
+                    в классе замель Content="{Binding MyPerson1}" 
+                     <Label Content="{Binding MyPerson1}" 
+                     x:Name="lbl1" 
+                     Grid.Column="1" 
+                     HorizontalAlignment="Left"
+                     Margin="275,342,0,0" 
+                     VerticalAlignment="Top" 
+                     Width="62"/>
+            3. Связывание на различных уровнях:
+                a. Связывание на уровне окна:
+                    a) В коде:
+                        public MainWindow()
+                            {
+                               
+                                InitializeComponent();
+                                MyPerson1 = new Person { Name = "Very special person!" };
+                                this.DataContext = this -- Связывание на уровне окна;
+                            }
+                    b) в замельЖ
+                        <Label Content="{Binding MyPerson1}" 
+                                 x:Name="lbl1" 
+                                 Grid.Column="1" 
+                                 HorizontalAlignment="Left"
+                                 Margin="275,342,0,0" 
+                                 VerticalAlignment="Top" 
+                                 Width="62"/>
+
+                                 или через элемент
+
+                    a) В коде:
+                        public MainWindow()
+                            {
+                               
+                                InitializeComponent();
+                                MyPerson1 = new Person { Name = "Very special person!" };
+                                this.lbl1.DataContext = this -- Связывание на уровне окна;
+                            }
+                    b) в замель:
+                        <Label Content="{Binding MyPerson1}" 
+                                 x:Name="lbl1" 
+                                 Grid.Column="1" 
+                                 HorizontalAlignment="Left"
+                                 Margin="275,342,0,0" 
+                                 VerticalAlignment="Top" 
+                                 Width="62"/> 
+                                 
+                b. Можно не употреблять this как Value и тогда так же не надо привязывать ко всему объекту
+                    в замель. а только к его полям:
+                    a) В коде:
+                        public MainWindow()
+                            {
+                               
+                                InitializeComponent();
+                                MyPerson1 = new Person { Name = "Very special person!" };
+                                this.lbl1.DataContext = MyPerson1 -- Связывание на уровне окна;
+                            }
+                    b) в замель:
+                        <Label Content="{Binding Name}" 
+                                 x:Name="lbl1" 
+                                 Grid.Column="1" 
+                                 HorizontalAlignment="Left"
+                                 Margin="275,342,0,0" 
+                                 VerticalAlignment="Top" 
+                                 Width="62"/>
+                c. На уровне Grid (в этом случае в замель нужно дать кодовое имя для Grid)
+                    a) В коде:
+                        public MainWindow()
+                            {
+                               
+                                InitializeComponent();
+                                MyPerson1 = new Person { Name = "Very special person!" };
+                                this.grid1.DataContext = MyPerson -- Связывание на уровне окна;
+                            }
+                    b) в замель:
+                        <Grid Name = "grid1">
+                                <Label Content="{Binding MyPerson1}" 
+                                         x:Name="lbl1" 
+                                         Grid.Column="1" 
+                                         HorizontalAlignment="Left"
+                                         Margin="275,342,0,0" 
+                                         VerticalAlignment="Top" 
+                                         Width="62"/>
+                        </Grid>
+Дизайн WPF:
+    I. Resources (источники) - это способ задать определёный дизайн нескольким элементам окна WPF.Для этого
+        нужно:
+            1. Написать в земеле тот дизайн, который мы хотим задать тому или иному элементу. Делается это
+                так:
+                     <Window.Resources>
+                        <SolidColorBrush Color="Blue" x:Key="MyYellowWindowsScope"/>
+                        <Style TargetType="Button" x:Key="MyWindowScopeStyle1">
+                            <Setter Property="Foreground" Value="Blue"/>
+                            <Setter Property="FontWeight" Value="ExtraBold"/>
+                            <Setter Property="Background" Value="Yellow"/>
+                        </Style>
+                    </Window.Resources>
+            2. Строчки приведёные выше всегда находятся перед блоками в которых находятся целевые элементы.
+            3. Виды связей Window.Resources с дизайнами элементов:
+                1)StaticResource - дизайн выводится на экран использую только "замель ресурсы"
+                        <Window.Resources>
+                                <SolidColorBrush Color="Blue" x:Key="MyYellowWindowsScope"/>
+                        </Window.Resources>
+
+              
+                
+                        <Grid>
+
+                            <Button Content="Yellow" 
+                            Margin="1,21,338,304" 
+                            x:Name="btnBlueUp"
+                            Background="{StaticResource MyYellowWindowsScope}" 
+                            d:IsLocked="True" Grid.Column="1"/>
+
+                            <Button Content="Yellow" 
+                            Margin="1,130,338,251" 
+                            x:Name="btnBlueDown"
+                            Background="{StaticResource MyYellowWindowsScope}"  
+                            Grid.Column="1"/>
+
+                        </Grid>
+
+                    a) В выше приведёном примере мы получим в окне две кнопки цвета Blue как записано в <Window.Resources>
+                        в его атрибуте SolidColorBrush Color. Это происходит т.к. дизайн кнопоки связан 
+                        посредством ключа Window.Resources = "MyYellowWindowsScope"  и их атрибута Background
+                            (Background="{StaticResource MyYellowWindowsScope}")
+                        Поэтому цвет кнопок равен цвету который задан в Window.Resources в атрибуте SolidColorBrush Color
+                        который в свою очередь равен BLUE. 
+
+                        !!! 
+                            Такая связь даёт возможность не менять цвет в каждой кнопке, а менять его только в Window.Resources
+                            к которым эти кнопки подсоединены
+                        !!!
+                    b) Если же требуется, задать другой цвет какой либо другой кнопке (или группе кнопок), то
+                        просто в <Window.Resources> нужно создать новый стиль и обязательно задать ему другой 
+                        ключ, а далее сделать все д-вия которые были уже привидены выше.
+         
+
+                2)DynamycResource - дизайн выводится на экран используя  непосредствено
+                    код программы в замель классе (дизайн задаётся в классе а не в замель):
+                    a) Строчки кода в классе:
+                          public MainWindow()
+                            {
+                                this.Resources["MyDynamicColor"] = new SolidColorBrush(Colors.LightPink);
+                                InitializeComponent();
+                            }
+                         private void Button_Click(object sender, RoutedEventArgs e)
+                            {
+                                this.Resources["MyDynamicColor"] = btnYellow.Background;
+                            }
+
+                        private void Button_Click_1(object sender, RoutedEventArgs e)
+                            {
+                                this.Resources["MyDynamicColor"] = btnGreen.Background;
+                            }
+                    b) Строчки в замель:
+                        <Window.Resources>
+                                <SolidColorBrush Color="Yellow" x:Key="MyYellowWindowsScope"/>
+                                <SolidColorBrush Color="Green" x:Key="MyGreenWindowsScope"/>
+                        </Window.Resources>
+                        
+                        <Grid>
+
+                            <Button Content="Yellow" 
+                            Margin="1,21,338,304" 
+                            x:Name="btnYellow"
+                            Click = "Button_Click"
+                            Background="{StaticResource MyYellowWindowsScope}" 
+                            d:IsLocked="True" Grid.Column="1"/>
+
+                            <Button Content="Yellow" 
+                            Margin="1,130,338,251" 
+                            x:Name="btnGreen"
+                            Click = "Button_Click"
+                            Background="{StaticResource MyGreenWindowsScope}"  
+                            Grid.Column="1"/>
+
+                            <Border BorderBrush= "Black" 
+                                    BorderThickness = "1"
+                                    BackBackground="{DynamicResource MyDynamicScope}" 
+                                    HorizontalAligment = "Left"
+                                    Height = "64"/>
+
+                        </Grid>  
+                        !!!   Описание:
+                              Этот код означает что когда мы нажнём на кнопку под именем btnYellow 
+                            после запуска программы,то значение атрибута Background опредилит форму дизайна
+                            имющего ключ "MyDynamicColor" который мы задали как атрибут Resources в коде
+                            в конструкторе класса замель( public MainWindow())--> все элементы связаные с 
+                            Resources по даному ключу ("MyDynamicColor") и их соответственному атрибуту 
+                            (в нашем случае это элемент Borde и его атрибут Background)  помяняют свой 
+                            дизайн на дизайн кнопки btnYellow. 
+                              Если нажать на кнопку имяющей имя x:Name="btnGreen", то соответствено и
+                            Background нашего Border-а поменяется на Background кнопки под именем "btnGreen"
+                    c) Чтобы дизайн стал общедоступен не только для конкретного окна, а для всех окон
+                        проекта. Window.Resources нужно записать не в замеле конкретного окна, а в замеле
+                        всего проэкта (App.xaml). Но тогда это будет не в блоке Window.Resources, а в блоке
+                        Application.Resources:
+                        <Application x:Class="L50.App"
+                                     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                                     xmlns:local="clr-namespace:L50"
+                                     StartupUri="MainWindow.xaml">
+                            <Application.Resources>
+                                <SolidColorBrush Color="LightGreen" x:Key="MyAppStyle"/>
+                                <Style TargetType="Button" x:Key="MyAppStyle">
+                                    <Setter Property="Foreground" Value="Blue"/>
+                                    <Setter Property="FontWeight" Value="ExtraBold"/>
+                                </Style>
+                            </Application.Resources>
+                        </Application>
+                           
+    II. Style -- очень похож на Resources с одним отличием -- используя эту опцию можно менять не только
+                Background но и весь дизайн элемента. Кроме этого приоретет определения дизайна отдаётся
+                самому элементу.Т.е. дизайн который записан в самом элементе преобладает над дизайнои 
+                записаном в Window.Resources
+            1. Часть Window.Resources выглядит так (связь с Window.Resources происходит посредством 
+                    атрибута BasedOn="{StaticResource MyWindowsScopeStyle1}") самого элемента. В данном
+                    случае кнопки:
+                <Window.Resources>
+                    <Style TargetType = "Button" x:Key = "MyWindowsScopeStyle1">
+                        <Setter Property="Foreground" Value="Blue"/>
+                        <Setter Property="FontWight" Value="ExtraBold"/>
+                    </Style>
+                </Window.Resources>
+            2.  Часть панели
+            <Grid>
+                <Button Content="Button1" Margin="20,322,195,51">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource MyWindowsScopeStyle1}">
+                        <Setter Property="Background" Value="Yellow"/> 
+                        <Setter Property="FontWight" Value="Light"/>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button Content="Button2" Margin="20,322,195,51">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource MyWindowsScopeStyle1}">
+                       
+                    </Style>
+                </Button.Style>
+            </Button>
+             <Button Content="Button" Margin="20,322,195,51">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource MyAppStyle}">
+                       
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
+
+
+    III. Triggers -- элемент меняет дизайн на дизайн указаный в блоке <Trigger> когда происходит какое-либо      
+                    событие.
+         1.  Dependency Property Trigger - дизайн элемента меняется когда происходит событие присвоеное
+                                   атрибуту Property="nameEvent". В нашем случае это события, когда 
+                                   курсор находится над кнопкой , т.к Property="IsMouseOver".
+                                      При этом меняется цвет шрифта на Blue,а цвет Background на  LightGreen.
+                                    После того как курсор уходит с области кнопки, дизайн снова меняется на 
+                                    дизайнуказаный в блоке Style:
+
+                            <Window.Resources>
+                            <Style TargetType = "Button" x:Key = "MyWindowsScopeStyle1">
+                                <Setter Property="Foreground" Value="Blue"/>
+                                <Setter Property="FontWight" Value="ExtraBold"/>
+                            </Style>
+                        </Window.Resources>
+                        <Grid>
+                            <Button Content="Triggers Style" Margin="20,322,195,51">
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource MyWindowsScopeStyle1}">
+                                        <Setter Property="Background" Value="LightPink"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Foreground" Value="Blue"/>
+                                                <Setter Property="Background" Value="LightGreen"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </Grid>
+!!!
+       Dependency Property --  как проверить каким Properties можно задать значение Value. Это можно
+                                проверить в классе замель. Написать к примеру Button и нажать F12
+                                Потом посмотреть, какие Properties находятся в классе Button а также
+                                посмотреть, что находится в наследуемом классе.
+!!!
+
+
+        2. DataTrigger -- это Trigger, который основан на каком то событии, происходящим в элементе, который
+                            связан с элементом в котором находится Trigger. 
+                          Связь между событием и Trigger-ом записывается в блоке DataTrigger (котрый на
+                          ходится в свою очередь в блоке Style) целевого элемента. 
+                           
+                В ниже приведёном примере мы видим что TextBlock меняет свой дизайн, когда связаный с ним 
+              CHECKBOX меняет свой статус на "true". Здесь нужное события записано не в Properties как 
+              это было в предыдущем варианте, а в Binding:  
+                                    Binding="{Binding ElementName= cbSample,Path=IsChecked}"Value="True"
+              
+                <CheckBox Name="cbSample" Content="Hello, world?" Margin="170,310,55,89"/>
+                <TextBlock HorizontalAlignment="Left" Margin="170,342,0,0" 
+                            VerticalAlignment="Top" Width="145" FontSize="25" RenderTransformOrigin="0.592,0.219">
+
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Text" Value="No Checked"/>
+                            <Setter Property="Foreground" Value="Red"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName= cbSample,Path=IsChecked}" Value="True">
+                                    <Setter Property="Text" Value="Is Checked!"/>
+                                    <Setter Property="Foreground" Value="Green"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+        3. EventTigger - это Trigger, который вступает в действие, когда происходит событие, которое 
+                        находится в RoutedEvent.Этот тригер восновном используется для анимаций. Для
+                        анимаций используется специальный блок.
+                1) <Style TargetType="TextBlock"> - в каком элементе должны произойти изменения 
+                                                    (целевой элемент)
+                            <Style.Triggers>
+
+                                <EventTrigger RoutedEvent="MouseDown"> - RoutedEvent получает событие при 
+                                                                    котором должны начать выполняться ниже
+                                                                    приведёные действия. В первом случае при
+                                                                    нажатии мыши на элементе, а во втором
+                                                                    когда курсор мыши покидает область 
+                                                                    целевого элемента.
+                                     <EventTrigger.Actions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0:0:0.300" Storyboard.TargetProperty ="FontSyze" To ="28"/>
+                                                <DoubleAnimation Duration="0:0:0.300" Storyboard.TargetProperty ="FontSyze" To ="18"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                     </EventTrigger.Actions>
+                                </EventTrigger>
+
+                                <EventTrigger RoutedEvent="MouseLeave">
+                                    <EventTrigger.Actions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0:0:0.800" Storyboard.TargetProperty ="FontSyze" To ="36"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger.Actions>
+                                </EventTrigger>
+                            </Style.Triggers>
+                1) <BeginStoryboard> </BeginStoryboard>
+                    а. В этом блоке есть ещё один блок Storyboard
+                    b. А уже в этом блоке посредством DoubleAnimation и его атрибутов мы оределяем то, 
+                       что должно происходить во время анимации:
+                       a) Duration - определяет время анимации (её продолжительность);
+                       b) Storyboard.TargetProperty = "nameProperty" To="граница изменения"
+                            - определяет какое свойство анимация должна изменить ( в нашем случае "FontSyze")
+                                и насколько ( в нашем случае "FontSyze" должен измениться до 28 в первом
+                                случае, а во втором до 18)
+
+                        
+                       <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Duration="0:0:0.300" 
+                                                 Storyboard.TargetProperty ="FontSyze" 
+                                                 To ="28"/>
+                                <DoubleAnimation Duration="0:0:0.300" 
+                                                 Storyboard.TargetProperty ="FontSyze" 
+                                                 To ="18"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                                       
+
+************************************************* метод МVVM *************************************************         
+Замель использует ВЬЮЭР (контролер). ВЬЮЭР используется в моделе кот называется MVC or MVVM
+                M (different models of DB, к примеру) - возможность работы с различными БД при помощи отмены или
+                                                        возобновления связей между "М" и контролером
+                C (Controler or View Model) -- 
+                V (view) -- в этой части мы только рисуем и эта часть программы не должна знать, что происходит
+                            в самой программе. Это к примеру даёт возможность делать несколько UI для одной проги
+                            Это делается просто отменяя или возбновляя связи между контролером и различными UI.
+
+                !!! Нельзя соединять на прямую "М" и "V"!!!               
+
+    I.Работа MVVM по схеме интерфейса INotifyPropertyChange:
+        1. Block "MODEL":
+            В даном примере мы используем в качестве источника данных для WPF класс Person. Однако мы не можем
+            вывести сразу на экран изменения в Properties класса Person без определёных д-вий. Эти д-вия            
+            внесены в интрефейс INotifyPropertyChange, а также записаны во внутреней ф-ции .Net, которая             
+            подписана на event PropertyChangedEventHandler PropertyChanged (имя функции 
+            PropertyChangedEventManager. Эта функция получает через этот Event property класса Person 
+            которое было изменено и выводит это изменение на экран WPF:      
+
+                public class Person:INotifyPropertyChange
+                {
+                    private string name;
+
+                    public string Name
+                    {
+                        get
+                        {
+                            return this.name;
+                        }
+                        set
+                        {
+                            this.name = value;
+                            OnPropertyChanged("Name");
+                        }
+                    }
+
+                    public event PropertyChangedEventHandler PropertyChanged;
+
+                    public override string ToString()
+                    {
+                        return $"Person name {Name}";
+                    }
+
+                    private void OnPropertyChanged (string property)
+                    {
+                        if (PropertyChanged != null)
+                        {
+                            PropertyChanged(this, new PropertyChangedEventArgs(property));
+                        }
+                    }
+                }
+        2.Block " View Model":
+            class MainWindowViewModel
+            {
+                public Person MyPerson1 { get; set; }
+
+                public MainWindowViewModel()
+                {
+                    MyPerson1 = new Person() { Name = "Yakov Israel" };
+                }
+            }
+
+        3. Block "View" -- это класс замель:
+
+            public partial class MainWindow : Window
+            {
+                private MainWindowViewModel mvvm;
+                public MainWindow()
+                {
+                    mvvm = new MainWindowViewModel();
+                    InitializeComponent();
+                    DataContext = mvvm;         
+                }
+
+                private void Button_Click(object sender, RoutedEventArgs e)
+                {
+                    mvvm.MyPerson1.Name = "Yakov";
+                }
+            }
+
+********************************************* RoutedEvent ****************************************************
+ RoutedEvent - он делает Routing (т.е. сообщает о событии сразуже нескольким слоям в замель WPF).
+ I. Bubbling Event - это когда сообщение о событии распростронеятся по слоям замель снизу вверх по 
+    иерархическому дереву
+    1.Window x:Class="L52_RoutedEvent_BubblingEvent.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:L52_RoutedEvent_BubblingEvent"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" ButtonBase.Click="Window_Click">
+    <Grid Margin="0,0,0,112">
+        <StackPanel Margin="20,10,27,119" ButtonBase.Click="StackPannel_Click">
+            <StackPanel Margin="10">
+                <TextBlock Name="txt1" FontSize="18" Margin="5" Text="This is TextBlock1"/>
+                <TextBlock Name="txt2" FontSize="18" Margin="5" Text="This is TextBlock2"/>
+                <TextBlock Name="txt3" FontSize="18" Margin="5" Text="This is TextBlock3"/>
+            </StackPanel>
+            <Button Margin="170,10,455,10" Content="Click me" Click="Button_Click" Height="35" RenderTransformOrigin="14.9,14.3"/>
+        </StackPanel>
+    </Grid>
+</Window>
+ II. Tunnel Event - это когда сообщение о сообытии распростронеятся по слоям замель сверху вниз по 
+    иерархическому дереву
+
+********************************************* ICommand **************************************************
+Вместо использования атрибута для вызова ф-ций из замель класса как к примеру атрибут Click в элементе
+Button, используется атрибут Command:
+                                     Command = "{Binding MyCommand, Source={StaticResource vm}}"
+
+Для это нужно:
+    I.Pattern где для каждого элемента надо определять отдельный класс в части Model в модели MVVM:
+        1.Замель 
+            1) Связать класс замель с классом ManinWindowViewModel (View Model): 
+                <Window.Resources>
+                    <local:ManinWindowViewModel x:Key="vm"/>
+                </Window.Resources>
+            2) Cвязать конкретный элемент в замель с полем в классе View Model
+                осуществляется через его атрибут, имеющий название Command:
+                    Command = "{Binding MyCommand, Source={StaticResource vm}}"
+                    1) vm здесь как объект класса ManinWindowViewModel. Этот объект
+                        мы определяем в Window.Resources.
+                    2) MyCommand - это поле типа ICommand в классе ManinWindowViewModel
+       2. Класс ManinWindowViewModel (View Model) содержит: 
+            1)Поле/поля для связи с элементом/элементами замель.  Тип всех таких полей должен быть ICommand.
+            2)Преобразывавание этого/этих поля/полей в объект/объекты классов (Model). В нашем случае класс,
+              представляющий чась Model модели MVVM - это класс Command.
+                public ICommand MyCommand { get; set; }
+                public MyCommand()
+                {
+                    MyCommand = new Command();
+                }
+      3. Класс Command (Model) 
+            1) Он наследует функционал от ICommand
+      4. ICommand содержит:
+        1) delegate типа EventHandler
+        2) булеаную функцию CanExecute (оbject parametr) -- определяет состояния элемента
+        3) войдовая функция Execute (оbject parametr) -- производит д-вие, которое должен сделать элемент
+                                                    если требуемое событие произошло ( к примеру в 
+                                                    случае если элемент - это кнопка, то при нажатии на
+                                                    неё эта функция выполняет требуемый функционал. В
+                                                    примере приведёном ниже выводит на экран сообщение
+                                                    в окне MassegeBox):
+                    class Command : ICommand
+                    {
+                        public event EventHandler CanExecuteChanged;
+
+                        public bool CanExecute(object parameter)
+                        {
+                            return true;
+                        }
+
+                        public void Execute(object parameter)
+                        {
+                            MessageBox.Show("No code behind!");
+                        }
+                    }
+    II. Pattern при котором нужен только один класс из блока Model модели MVVM для различных кнопок
+        (Всё подобно патерну выше, но с добавлениями):
+        1. Всё как и в патерне выше
+            1) Связать класс замель с классом ManinWindowViewModel (View Model): 
+                <Window.Resources>
+                    <local:ManinWindowViewModel x:Key="vm"/>
+                </Window.Resources>
+            2) Cвязать конкретный элемент в замель с полем в классе View Model
+                осуществляется через его атрибут, имеющий название Command:
+                    Command = "{Binding MyRealyCommand, Source={StaticResource vm}}"
+                    1) vm здесь как объект класса ManinWindowViewModel. Этот объект
+                        мы определяем в Window.Resources.
+                    2) MyRealyCommand - это поле типа ICommand в классе ManinWindowViewModel
+        2. Всё так же, но при определении объкта класса из блока Model модели MVVM изпользуем не его
+           конструктор по умолчанию, а его конструктор с параметрами. При чём для передачи этих
+           параметров возможно прибегнуть к помощи лямбда выражений как в примере ниже
+
+                        public ICommand MyCommand { get; set; }
+                        public MyCommand()
+                        {
+                            MyRealyCommand = new RealyCommand((o) => {return true;},(o) => 
+                                                                MessageBox.Show("Relay1");});
+                        }
+       3.Всё тоже, но добавлеям поля делегатов Func<> и Action<>:
+            class RelayCommand : ICommand
+            {
+                public event EventHandler CanExecuteChanged;
+                Action<object> executeMethod;
+                Func<object, bool> canExecute;
+
+                public RelayCommand (Func<object,bool>canExecute,Action<object>executeMethod)
+                {
+                    this.executeMethod = executeMethod;
+                    this.canExecute = canExecute;
+                }
+
+                public bool CanExecute (object parameter)
+                {
+                    return this.canExecute (parameter);
+                }
+
+                public void Execute (object parameter)
+                {
+                    this.executeMethod (parameter);
+                }
+            }
+    III. Pattern для передачи функции различного типа параметров (не как object)
+        1. Всё также
+            1) Связать класс замель с классом ManinWindowViewModel (View Model): 
+                <Window.Resources>
+                    <local:ManinWindowViewModel x:Key="vm"/>
+                </Window.Resources>
+            2) Cвязать конкретный элемент в замель с полем в классе View Model
+                осуществляется через его атрибут, имеющий название Command:
+                    Command = "{Binding MyActionCommand, Source={StaticResource vm}}"
+                    1) vm здесь как объект класса ManinWindowViewModel. Этот объект
+                        мы определяем в Window.Resources.
+                    2) MyRealyCommand - это поле типа ICommand в классе ManinWindowViewModel
+       2.Всё также ка и в патерне (III), но при передачи должен быть указан тип передаваемого 
+         параметра в угольных скобках: 
+        
+                        public ICommand MyActionCommand { get; set; }
+                        public MyCommand()
+                        {
+                            MyActionCommand = new ActionCommand <string> ((s) => { return true; }, 
+                                                (s) => { MessageBox.Show(s)); }); 
+                        }
+      3.Всё также ка и в патерне (II), но при передаче должен быть указан тип передаваемого 
+         параметра в круглых скобках, а также поля делегатов должны быть типа генерик: 
+            class ActionCommand<T> : ICommand
+            {
+                public event EventHandler CanExecuteChanged;
+                Action<T> executeMethod;
+                Func<T, bool> canExecute;
+
+                public ActionCommand(Func<T, bool> canExecute, Action<T> executeMethod)
+                {
+                    this.executeMethod = executeMethod;
+                    this.canExecute = canExecute;
+                }
+                public bool CanExecute(object parameter)
+                {
+                    return this.canExecute((T)parameter);
+                }
+
+                public void Execute(object parameter)
+                {
+                    this.executeMethod((T)parameter);
+                }
+            }
+    IV. Pattern -- DelegateCommand для изменения кнопки с Enable в Disable  и наоборот согласно 
+        определёной логике. Рекомендация не использовать для этого возможности WPF, а делать это
+        через код программы при помощи данного паттерна. 
+         1. Всё также
+            1) Связать класс замель с классом ManinWindowViewModel (View Model): 
+                <Window.Resources>
+                    <local:ManinWindowViewModel x:Key="vm"/>
+                </Window.Resources>
+            2) Cвязать конкретный элемент в замель с полем в классе View Model
+                осуществляется через его атрибут, имеющий название Command:
+                    Command = "{Binding MyDelegate, Source={StaticResource vm}}"
+                    1) vm здесь как объект класса ManinWindowViewModel. Этот объект
+                        мы определяем в Window.Resources.
+                    2) MyDelegate - это поле типа ICommand в классе ManinWindowViewModel
+        2.Всё также как и в патерне (II), но при том чтобы мы видели измения в отображении кнопки
+          нам нужно использовать отдельный процесс типа TASK, чтобы мы успевали увидеть эти изменения: 
+        
+                            public DelegateCommand MyDelegate { get; set; }
+
+                            public MainWindowViewModel()
+                            {
+                                MyDelegate = new DelegateCommand(ExecuteCommand, CanExecuteMethod);
+
+                                Task.Run(() =>
+                               {
+                                   while (true)
+                                   {
+                                       MyDelegate.RaiseCanExecuteChanged();
+                                       Thread.Sleep(500);
+                                   }
+                               });
+                            }
+
+                            // delegate 
+                            private bool CanExecuteMethod()
+                            {
+                                return DateTime.Now.Second % 2 == 0;
+                            }
+
+                            private void ExecuteCommand()
+                            {
+                                MessageBox.Show("Delegate no code behind!");
+                            }
+
+       3.Для этого паттерна не требуется писать вручную класс из блока Model модели MVVM т.к. он в строен
+        в NameSpace Prism  и называется по имени данного паттерна DelegateCommand.Ну и как понятно не
+        нужно укызвать наследуемость от интерфейса ICommand.
+        

@@ -1,0 +1,36 @@
+1. log4Net вставляют в проэкт запуска кода
+2. Нужно создать в проэкте запуска файл log4net.config cодержащий в себе:
+	<log4net>
+		<root>
+			<level value = "All"/>
+			<appender-ref = "console"/>
+			<appender-ref = "file"/>
+		</root>
+		<appender name="console" type="log4net.Appender.ConsoleAppender">
+			<layout type = "log4net.Layout.PatternLayout">
+				<conversionPattern value="%date %level %logger - %message%newline"/>
+			</layout>
+		</appender>
+		<appender name ="file" type="log4net.Appender.RollingFileAppender">
+			<file value = "myapp.log"/>
+			<appendToFile value = "true"/>
+			<rollingStyle value = "Size"/>
+			<maxSizeRollBackups value = "5"/>
+			<maximumFileSize value = "10MB"/>
+			<staticLofFileName value = "true"/>
+			<layout type = "log4net.Layout.PatternLayout"/>
+				<connversionPattern value ="%date [%thread] %level %logger - %massage%newline"/>
+			</layout>
+		</appender>
+	</log4net>
+
+3. В Program.cs нужно записать следующееЖ
+	* Перед Main а также в части объявления полей каждого класса использующего log4net нужно писать следующее:
+		private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrent)
+	* В блоке Main
+			var logRepository = LogManager.GerRepository(Assembly.GetEntryAssembly());
+			XmlConfigurator.Configure(logRepository,new FileInfo("log4net.config"));
+4. Лекция от 17-03-21: 
+		В Solution Explorer => Log4net.config правая кнопка мыши => Properties => изменить:
+													Build Action = Content
+													Copy to Output Directory = Copy always
